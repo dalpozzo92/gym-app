@@ -1,0 +1,87 @@
+/* Aggiungi la classe .login-page per garantire che gli stili autofill siano applicati solo nella pagina di login */
+.login-page {
+    --adm-color-primary: #2c949d; 
+    --adm-color-success: #10b981; 
+    --adm-color-warning: #f59e0b; 
+    --adm-color-danger: #ef4444; 
+    --adm-color-background: #00000000; 
+    --adm-color-text: #ffffff; 
+    background-color: transparent !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+    box-shadow: 0 0 0px 1000px #000 inset !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Autofill specifico per la pagina di login */
+.login-page input:-webkit-autofill {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000000d7 inset !important;
+    box-shadow: 0 0 0px 1000px #0616179d inset !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+}
+
+/* Autofill per focus e hover, solo nella pagina login */
+.login-page input:-webkit-autofill:focus,
+.login-page input:-webkit-autofill:hover {
+    background-color: transparent !important;
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+    box-shadow: 0 0 0px 1000px #6db7dc inset !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+}
+
+
+
+/* Sfondo immagine */
+.login-container {
+    background-image: url('/images/background-2.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
+    z-index: 1;
+}
+
+
+  
+ /* Contenitore del logo */
+.logo-container {
+    
+    background-image: url("/images/logo-crew.png");
+    position: absolute;
+    top: 30px;
+    text-align: center;
+}
+
+.login-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.login-form-box {
+    background-color:#000000d9;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 300px;
+    width: 90%;
+    margin: 20px;
+}
+
+.input-field {
+    border-radius: 10px;
+}
+
+
+

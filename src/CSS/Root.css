@@ -1,0 +1,8 @@
+:root:root {
+    --adm-color-primary: #2c949d; /* Colore principale */
+    --adm-color-success: #10b981; /* Successo */
+    --adm-color-warning: #f59e0b; /* Avvisi */
+    --adm-color-danger: #ef4444; /* Errori */
+    --adm-color-background: #00000000; 
+    --adm-color-text: #ffffff; /* Colore testo principale */
+  }

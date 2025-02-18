@@ -1,0 +1,23 @@
+.my-tapbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.804);
+  height: 50px; /* Mantiene l'altezza della pagina corretta */
+
+}
+
+/* RIMUOVI questa regola se causa problemi */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 50px; 
+  overflow: hidden; 
+  flex: 0;
+  overflow-y: auto;
+  
+}
+
+

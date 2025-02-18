@@ -1,0 +1,21 @@
+.home {
+    --adm-color-primary: #2c949d; 
+    --adm-color-success: #10b981; 
+    --adm-color-warning: #f59e0b; 
+    --adm-color-danger: #ef4444; 
+    --adm-color-background: #171717; 
+    --adm-color-text: #ffffff; 
+  }
+
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Occupa tutta l'altezza dello schermo */
+    overflow: hidden;
+  }
+  
+  .page-content {
+    flex: 1;
+    overflow-y: auto; /* Permette lo scroll del contenuto */
+    padding-bottom: 60px; /* Lascia spazio per il TabBar */
+  }
