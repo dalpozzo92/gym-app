@@ -406,7 +406,7 @@ const RegisterForm = () => {
       console.log(`Errore durante la registrazione: ${error.message}`);
       Toast.show({
         icon: 'fail',
-        content: 'Errore durante la registrazione!',
+        content: 'Attenzione, errore durante la registrazione!',
       })
     } finally {
       setLoading(false);
