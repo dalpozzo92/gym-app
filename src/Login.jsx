@@ -251,7 +251,7 @@ import { Form, Input, Button, Tabs, Toast, SpinLoading } from 'antd-mobile';
 import './CSS/Login.css';  // Assicurati di avere il file CSS per gli stili aggiuntivi
 import { createClient } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 
 
 const supabaseUrl = 'https://btvkhnecdcetfiaoozdt.supabase.co';
@@ -264,56 +264,63 @@ const Login = () => {
   const [loading, setLoading] = useState(true); // Stato per il caricamento
 
   const navigate = useNavigate();
+  const [backgroundImage, setBackgroundImage] = useState('');
+    const [fadeOut, setFadeOut] = useState(false); // Stato per gestire la dissolvenza
+
 
   useEffect(() => {
-    document.body.classList.add("login-page");
 
-    const imgUrls = [
-      "/images/background-2.jpg",
-    ];
+    const img = new Image();
+    img.src = '/images/background-2.jpg'; // Percorso dell'immagine
 
-    const loadImages = imgUrls.map((src) => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.src = src;
-        img.onload = resolve;
-      });
-    });
+    img.onload = () => {
+      setBackgroundImage(`url(${img.src})`);
+      setLoading(false); // Imposta loading a false non appena l'immagine è caricata
+      setFadeOut(true); // Inizia la dissolvenza
+    };
+ 
 
-    Promise.all(loadImages).then(() => setLoading(false));
-
-    return () => document.body.classList.remove("login-page");
+    return () => {
+      // Pulizia se necessario
+    };
   }, []);
 
+  const backgroundStyle = {
+    backgroundImage: backgroundImage,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
 
 
 
+  return (
 
-  return loading ? (
-    <div
-    style={{
-      height: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#000000",
-    }}
-  >        <SpinLoading size="large" />
-      </div>
- ) : (
-     
-       <motion.div
+     <Form className="login-page"
+     style={backgroundStyle}
+      >
+         {loading && (
+        <div className={`loading-overlay ${fadeOut ? 'hidden' : ''}`}>
+          <SpinLoading size="large" />
+        </div>
+      )}
+       
+            {/* <div className={`logo-container ${loading ? 'hidden' : ''}`}>*/}
+
+      
+
+            <motion.div className="moton-div"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.2 }}
+      transition={{ duration: 1.5 }}
     >
- <div className="logo-container" >
-   
       {/* <Form className="login-form-box"> */}
-        <Tabs className="login-form-box"
+        <Tabs className="login-tabs-box"
           activeKey={showLogin}
           onChange={(key) => setShowLogin(key)}
-          style={{ marginBottom: '20px', borderBottom: '1px solid #444' }}
           color={'primary'}
         >
           <Tabs.Tab title="Accedi" key="login" style={{ color: showLogin === 'login' ? '#fff' : '#aaa' }}>
@@ -323,15 +330,18 @@ const Login = () => {
             <RegisterForm />
           </Tabs.Tab>
         </Tabs>
+
+        </motion.div>
+
       {/* </Form> */}
-      </div>
-      </motion.div>
-    
+      
+      </Form>
+   
   );
 };
 
 const LoginForm = ({ navigate }) => {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ email: '', password: ''});
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -340,43 +350,43 @@ const LoginForm = ({ navigate }) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      console.log('Login effettuato con successo!');
-      Toast.show({
-        icon: 'success',
-        content: 'Login effettuato con successo!',
-      })
-      navigate('/home'); // Naviga alla Home dopo il login
+      Toast.show({ content: 'Login effettuato con successo!' });
+      // Esempio di navigazione successiva:
+      navigate('/home');
     } catch (error) {
-      console.log(`Errore durante il login: ${error.message}`);
-      Toast.show({
-        icon: 'fail',
-        content: 'Errore nel login!',
-      })
+      Toast.show({ content: `Errore durante il login: ${error.message}` });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Form
+    <Form className="login-form"
       layout="vertical"
       onFinish={handleLogin}
       footer={
-        <Button block color="primary" size="large" onClick={handleLogin} loading={loading}>
+        <Button block shape='rounded' color="primary" size="large" onClick={handleLogin} loading={loading}>
           Accedi
         </Button>
       }
     >
-      <Form.Item label="Email" style={{ color: '#fff'}}>
-        <Input
+      <Form.Item name="email" className="login-item-box"
+      rules={[
+        { required: true, message: "L'email è obbligatoria!" },
+        { type: "email", message: "Inserisci un'email valida!" }
+      ]}
+      >
+        <Input className="login-item-input"
           value={form.email}
 
           onChange={(val) => setForm({ ...form, email: val })}
           placeholder="Inserisci la tua email"
         />
-      </Form.Item>
-      <Form.Item label="Password" style={{ color: '#fff'}}>
-        <Input
+      </Form.Item >
+      <Form.Item name="password" className="login-item-box"
+            rules={[{ required: true, message: "La password è obbligatoria!" }]}
+>
+        <Input className="login-item-input"
           type="password"
           value={form.password}
           onChange={(val) => setForm({ ...form, password: val })}
@@ -388,50 +398,60 @@ const LoginForm = ({ navigate }) => {
 };
 
 const RegisterForm = () => {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ email: '', password: ''});
   const [loading, setLoading] = useState(false);
-
+  
   const handleRegister = async () => {
     const { email, password } = form;
     setLoading(true);
     try {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
-      console.log('Registrazione effettuata con successo!');
-      Toast.show({
-        icon: 'success',
-        content: 'Registrazione effettuata con successo!',
-      })
+      Toast.show({ content: 'Registrazione completata! Ora puoi accedere.' });
     } catch (error) {
-      console.log(`Errore durante la registrazione: ${error.message}`);
-      Toast.show({
-        icon: 'fail',
-        content: 'Attenzione, errore durante la registrazione!',
-      })
+      Toast.show({ content: `Errore durante la registrazione: ${error.message}` });
     } finally {
       setLoading(false);
     }
   };
 
+
   return (
-    <Form
+    <Form className="login-form"
       layout="vertical"
       onFinish={handleRegister}
       footer={
-        <Button block color="primary" size="large" onClick={handleRegister} loading={loading}>
+        <Button block shape='rounded' color="primary" size="large" onClick={handleRegister} loading={loading}>
           Registrati
         </Button>
       }
     >
-      <Form.Item label="Email">
-        <Input
+      <Form.Item  className="login-item-box" 
+      rules={[{ required: true, message: "Il nome è obbligatorio!" }]}
+      >
+        <Input className="login-item-input"
+           value={form.name}
+          onChange={(val) => setForm({ ...form, name: val })}
+          placeholder="Inserisci il tuo nome"
+          
+        />
+      </Form.Item>
+      <Form.Item name="email" className="login-item-box"
+        rules={[
+          { required: true, message: "L'email è obbligatoria!" },
+          { type: "email", message: "Inserisci un'email valida!" }
+        ]}
+      >
+        <Input className="login-item-input"
           value={form.email}
           onChange={(val) => setForm({ ...form, email: val })}
           placeholder="Inserisci la tua email"
         />
       </Form.Item>
-      <Form.Item label="Password" >
-        <Input
+      <Form.Item  className="login-item-box"
+      rules={[{ required: true, message: "La password è obbligatoria!" }]}
+      >
+        <Input className="login-item-input"
           type="password"
           value={form.password}
           onChange={(val) => setForm({ ...form, password: val })}
@@ -443,3 +463,64 @@ const RegisterForm = () => {
 };
 
 export default Login;
+
+
+
+
+// import React, { useState } from 'react';
+// import { Form, Input, Button, Picker, Space } from 'antd-mobile';
+// import { DownOutline } from 'antd-mobile-icons';
+// export default () => {
+//     const onFinish = (values) => {
+//         console.log(values);
+//     };
+//     const checkMobile = (_, value) => {
+//         if (value.realValue) {
+//             return Promise.resolve();
+//         }
+//         return Promise.reject(new Error('手机号不能为空!'));
+//     };
+//     return (<>
+//       <Form layout='vertical' onFinish={onFinish} initialValues={{
+//             mobile: { preValue: '86', realValue: '' },
+//         }} footer={<Button block type='submit' color='primary' size='large'>
+//             提交
+//           </Button>}>
+//         <Form.Header>自定义表单控件</Form.Header>
+//         <Form.Item label='姓名' name='name' rules={[{ required: true, message: '姓名不能为空!' }]}>
+//           <Input placeholder='请输入姓名'/>
+//         </Form.Item>
+//         <Form.Item label='手机号' name='mobile' rules={[{ required: true }, { validator: checkMobile }]}>
+//           <MobileField />
+//         </Form.Item>
+//       </Form>
+//     </>);
+// };
+// const columns = [['86', '01', '02', '03']];
+// const MobileField = ({ value = { preValue: '86', realValue: '' }, onChange, }) => {
+//     const [visible, setVisible] = useState(false);
+//     const triggerValue = (changedValue) => {
+//         onChange === null || onChange === void 0 ? void 0 : onChange(Object.assign(Object.assign({}, value), changedValue));
+//     };
+//     const onRealValueChange = (value) => {
+//         triggerValue({ realValue: value });
+//     };
+//     const onPreValueChange = (value) => {
+//         const v = value[0];
+//         if (v === null)
+//             return;
+//         triggerValue({ preValue: v });
+//     };
+//     return (<>
+//       <Space align='center'>
+//         <Space align='center' onClick={() => setVisible(true)}>
+//           <div>+{value.preValue}</div>
+//           <DownOutline />
+//         </Space>
+//         <Input placeholder='请输入手机号' value={value.realValue} onChange={onRealValueChange}/>
+//       </Space>
+//       <Picker columns={columns} visible={visible} onClose={() => {
+//             setVisible(false);
+//         }} value={[value.preValue]} onConfirm={onPreValueChange}/>
+//     </>);
+// };

@@ -7,9 +7,9 @@ import Home from './Home';
 
 export default function App() {
   // Impostiamo direttamente il tema scuro di default
-  useLayoutEffect(() => {
-    document.documentElement.setAttribute('data-prefers-color-scheme', 'dark')
-   }, [])
+  // useLayoutEffect(() => {
+  //   document.documentElement.setAttribute('data-prefers-color-scheme', 'dark')
+  //  }, [])
 
   return (
     <ConfigProvider>

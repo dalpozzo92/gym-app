@@ -1,43 +1,60 @@
-/* Aggiungi la classe .login-page per garantire che gli stili autofill siano applicati solo nella pagina di login */
+
+/*
 .login-page {
     --adm-color-primary: #2c949d; 
     --adm-color-success: #10b981; 
     --adm-color-warning: #f59e0b; 
     --adm-color-danger: #ef4444; 
-    --adm-color-background: #00000000; 
+    --adm-color-background: #0000008a; 
     --adm-color-text: #ffffff; 
-    background-color: transparent !important;
+     background-color: transparent !important;
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
     box-shadow: 0 0 0px 1000px #000 inset !important;
     transition: background-color 5000s ease-in-out 0s !important;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
 }
-
-/* Autofill specifico per la pagina di login */
+/* 
 .login-page input:-webkit-autofill {
     background-color: transparent !important;
     color: #ffffff !important;
     -webkit-box-shadow: 0 0 0px 1000px #000000d7 inset !important;
-    box-shadow: 0 0 0px 1000px #0616179d inset !important;
-    transition: background-color 9999s ease-in-out 0s !important;
+    box-shadow: 0 0 0px 1000px #06161700 inset !important;
+    transition: background-color 9999s ease-in-out 0s !important; 
 }
 
-/* Autofill per focus e hover, solo nella pagina login */
 .login-page input:-webkit-autofill:focus,
 .login-page input:-webkit-autofill:hover {
     background-color: transparent !important;
     -webkit-text-fill-color: #ffffff !important;
-    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
-    box-shadow: 0 0 0px 1000px #6db7dc inset !important;
-    transition: background-color 5000s ease-in-out 0s !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000000e6 inset !important;
+    box-shadow: 0 0 0px 1000px #0616174b inset !important;
+    transition: background-color 5000s ease-in-out 0s !important; 
 }
 
 
 
-/* Sfondo immagine */
 .login-container {
-    background-image: url('/images/background-2.jpg');
+    height: 100vh;
+    width: 100%; 
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(30px);
+}
+
+
+
+  
+.logo-container {
+    
+    background-image: url('/images/background-2.jpg'); 
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -46,42 +63,225 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
-    z-index: 1;
-}
-
-
-  
- /* Contenitore del logo */
-.logo-container {
+    transition: opacity 2s ease-in-out;
+    text-align: center; 
     
-    background-image: url("/images/logo-crew.png");
+
+}
+
+.loading-overlay {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: 30px;
-    text-align: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 10; 
 }
 
-.login-logo {
-    width: 150px;
-    height: auto;
-    margin-bottom: 20px;
-}
+.hidden {
+    opacity: 0;
+*/
+/* :root{
+    --border-inner:  0px var(--adm-border-color);
+    --border-top:  0px var(--adm-border-color);
+    --border-bottom:  0px var(--adm-border-color);
+    --prefix-width: 6.8em;
+    --padding-left: 16px; 
+    --padding-right: 12px; 
+    --border-inner: 0px var(---border-bottom);
+    --border-top: 0px var(---border-bottom);
+    --border-bottom: 0px var(---border-bottom);
+    --adm-radius-s: 4px;
+    --adm-radius-m: 8px;
+    --adm-radius-l: 12px;
+    --adm-font-size-1: 9px;
+    --adm-font-size-2: 10px;
+    --adm-font-size-3: 11px;
+    --adm-font-size-4: 12px;
+    --adm-font-size-5: 13px;
+    --adm-font-size-6: 14px;
+    --adm-font-size-7: 15px;
+    --adm-font-size-8: 16px;
+    --adm-font-size-9: 17px;
+    --adm-font-size-10: 18px;
+    --adm-color-primary: #1677ff;
+    --adm-color-success: #00b578;
+    --adm-color-warning: #ff8f1f;
+    --adm-color-danger: #ff3141;
+    --adm-color-yellow: #ff9f18;
+    --adm-color-orange: #ff6430;
+    --adm-color-wathet: #e7f1ff;
+    --adm-color-text: #333333;
+    --adm-color-text-secondary: #666666;
+    --adm-color-weak: #999999;
+    --adm-color-light: #cccccc;
+    --adm-color-border: #eeeeee;
+    --adm-color-background: #ffffff00;
+    --adm-color-highlight: var(--adm-color-danger);
+    --adm-color-white: #ffffff;
+    --adm-color-box: #f5f5f5;
+    --adm-color-text-light-solid: var(--adm-color-white);
+    --adm-color-text-dark-solid: #000000;
+    --adm-color-fill-content: var(--adm-color-box);
+    --adm-font-size-main: var(--adm-font-size-5);
+    --adm-font-family: -apple-system, blinkmacsystemfont, 'Helvetica Neue', helvetica, segoe ui, arial, roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+    --adm-border-color: var(--adm-color-border);
+    background-color:#9f4545a5;
+} */
+/* .adm-form {
+    --border-inner: 0px var(---border-inner);
+    --border-top: 0px var(---border-top);
+    --border-bottom: 0px var(---border-bottom);
+    
+} */
 
-.login-form-box {
+
+.login-page {
+   
     background-color:#000000d9;
-    padding: 30px;
-    border-radius: 8px;
-    max-width: 300px;
-    width: 90%;
-    margin: 20px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; 
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    position: fixed; 
+    top: 0;
+    left: 0;
 }
 
+.loading-overlay {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(18, 18, 18); 
+    z-index: 10; 
+    opacity: 1; /* Opacità iniziale */
+    transition: opacity 2s ease; /* Aggiunta della transizione */
+}
+
+.loading-overlay.hidden {
+    opacity: 0; /* Nascondi con opacità */
+    pointer-events: none; /* Disabilita gli eventi del mouse */
+}
+
+
+.form-container {
+    border-radius: 10px;
+    width: 90%;
+    align-items: center;
+    justify-content: center; 
+}
+
+.login-item-box {
+    justify-content: center;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0);
+
+}
+
+.login-item-input{
+    border-radius: 20px;
+    background-color: white;
+    height: 50px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.adm-list-body {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 20px;
+
+
+}
+
+.adm-input-element{
+    padding: 25px;
+    border-radius: 25px;
+
+}
+
+.adm-list-item-content-main{
+    margin: 0px;
+    
+    align-items: center;
+    justify-content: center; 
+}
+
+.adm-list-body-inner{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+
+}
+
+.adm-list{
+    padding-left: 0px;
+    width: 100%;
+}
+
+.adm-form .adm-list.adm-list{
+    --padding-left: 0px;
+    --padding-right: 0px;
+    --border-inner:0px;
+    --border-top: 0px;
+    --border-bottom:0px;
+    align-items: center;
+    justify-content: center; 
+}
+
+.adm-tabs-header {
+    background-color: rgba(0, 0, 0, 0.352); /* Sfondo semi-trasparente */
+    border-radius: 25px; /* Angoli arrotondati */
+    padding: 10px; /* Padding interno */
+    backdrop-filter: blur(10px); /* Opzionale: sfocatura sullo sfondo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Ombra per dare profondità */
+    border-bottom: 0px;
+    max-width: 500px;
+
+}
+
+.element-style{
+    border-bottom: 0px;
+}
+
+.adm-tabs{
+    max-width: 500px;
+    align-items: center;
+    justify-content: center; 
+}
+
+.moton-div{
+    max-width: 400px;
+    width: 100%;
+}
+/*
 .input-field {
     border-radius: 10px;
 }
 
 
-
+ */

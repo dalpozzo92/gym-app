@@ -16,6 +16,8 @@ function Home() {
 */
 import React, { useState, useEffect } from 'react';
 import { ResultPage, ProgressCircle } from 'antd-mobile';
+import { SafeArea } from 'antd-mobile'     
+
 import { AlipayCircleFill } from 'antd-mobile-icons';
 import MyTapBar from './MyTapBar'; // Importa il componente TapBar
 import './CSS/Home.css'
@@ -35,6 +37,8 @@ const Home = () => {
 
   return (
     <div className="page-container">
+              <SafeArea position='top' />
+
       <div className="page-content">
       <ResultPage
         status="waiting"
@@ -71,7 +75,11 @@ const Home = () => {
       </ResultPage>
 </div>
       {/* Inseriamo il componente MyTapBar alla fine */}
+      <SafeArea position='bottom' />
+
       <MyTapBar />
+      <SafeArea position='bottom' />
+
     </div>
   );
 };
