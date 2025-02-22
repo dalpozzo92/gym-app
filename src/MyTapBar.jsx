@@ -1,6 +1,6 @@
 // TabBar.jsx
 import React, { useState } from 'react';
-import { Badge, TabBar } from 'antd-mobile';
+import { Badge, TabBar, SafeArea } from 'antd-mobile';
 import { AppOutline, UnorderedListOutline, UserOutline } from 'antd-mobile-icons';
 import { useNavigate } from 'react-router-dom';
 import './CSS/MyTapBar.css'
@@ -51,7 +51,11 @@ const MyTabBar = () => {
           onClick={item.onClick}
         />
       ))}
+        <div style={{ background: '#ffcfac' }}>
+        <SafeArea position='bottom' />
+      </div>
     </TabBar>
+  
     </div>
   );
 };

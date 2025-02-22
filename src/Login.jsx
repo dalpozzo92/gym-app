@@ -247,7 +247,7 @@ export default Login;
 */
 
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Tabs, Toast, SpinLoading } from 'antd-mobile';
+import { Form, Input, Button, Tabs, Toast, SpinLoading, Image } from 'antd-mobile';
 import './CSS/Login.css';  // Assicurati di avere il file CSS per gli stili aggiuntivi
 import { createClient } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
@@ -258,32 +258,38 @@ const supabaseUrl = 'https://btvkhnecdcetfiaoozdt.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0dmtobmVjZGNldGZpYW9vemR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgwMTY3MzksImV4cCI6MjA1MzU5MjczOX0.KZZbe7QQWU2zQzEgMqe912SA0MWMp04_zk-bwytGQqU';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-
 const Login = () => {
   const [showLogin, setShowLogin] = useState('login');  // Cambia 'true' o 'false' con 'login' o 'register'
   const [loading, setLoading] = useState(true); // Stato per il caricamento
+  // const imgLogo = './images/logo-crew.png';
 
   const navigate = useNavigate();
-  const [backgroundImage, setBackgroundImage] = useState('');
+  // const [backgroundImage, setBackgroundImage] = useState('');
     const [fadeOut, setFadeOut] = useState(false); // Stato per gestire la dissolvenza
+    const backgroundImage = './images/background-2.jpg'; 
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const img = new Image();
-    img.src = '/images/background-2.jpg'; // Percorso dell'immagine
+  //   const img = new Image();
+  //   img.src = './images/background-2.jpg'; // Percorso dell'immagine
 
-    img.onload = () => {
-      setBackgroundImage(`url(${img.src})`);
-      setLoading(false); // Imposta loading a false non appena l'immagine è caricata
-      setFadeOut(true); // Inizia la dissolvenza
-    };
+  //   img.onload = () => {
+  //     setBackgroundImage(`url(${img.src})`);
+  //     setLoading(false); // Imposta loading a false non appena l'immagine è caricata
+  //     setFadeOut(true); // Inizia la dissolvenza
+  //   };
  
 
-    return () => {
-      // Pulizia se necessario
-    };
-  }, []);
+  //   return () => {
+  //     // Pulizia se necessario
+  //   };
+  // }, []);
+
+  const handleImageLoad = () => {
+    setLoading(false);
+    setFadeOut(true); // Inizia la dissolvenza
+  };
 
   const backgroundStyle = {
     backgroundImage: backgroundImage,
@@ -299,24 +305,51 @@ const Login = () => {
 
   return (
 
-     <Form className="login-page"
-     style={backgroundStyle}
-      >
-         {loading && (
-        <div className={`loading-overlay ${fadeOut ? 'hidden' : ''}`}>
-          <SpinLoading size="large" />
-        </div>
-      )}
+    //  <Form className="login-page"
+    //  style={backgroundStyle}
+    //   >
+    //      {loading && (
+    //     <div className={`loading-overlay ${fadeOut ? 'hidden' : ''}`}>
+    //       <SpinLoading size="large" />
+    //     </div>
+    //   )}
        
-            {/* <div className={`logo-container ${loading ? 'hidden' : ''}`}>*/}
+    <Form className="login-page">
+    {loading && (
+      <div className={`loading-overlay ${fadeOut ? 'hidden' : ''}`}>
+        <SpinLoading size="large" />
+      </div>
+    )}
+
+    {/* Componente Image di antd-mobile */}
+    <Image 
+      src={backgroundImage} 
+      fit="cover" 
+      style={{
+        height: '100vh',
+        width: '100%',
+        position: 'absolute', // Posizione assoluta per coprire il contenitore
+        top: 0,
+        left: 0,
+        zIndex: -1, // Mette l'immagine dietro il contenuto
+      }} 
+      onLoad={handleImageLoad} // Gestisci il caricamento
+    />  
 
       
 
-            <motion.div className="moton-div"
+    <motion.div className="moton-div"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.5 }}
     >
+
+        <Image 
+          src='./images/logo-crew.png' // Percorso del logo
+          fit='contain' 
+          className="logo"
+        />
+
       {/* <Form className="login-form-box"> */}
         <Tabs className="login-tabs-box"
           activeKey={showLogin}
@@ -426,12 +459,12 @@ const RegisterForm = () => {
         </Button>
       }
     >
-      <Form.Item  className="login-item-box" 
+      <Form.Item  name="name" className="login-item-box" 
       rules={[{ required: true, message: "Il nome è obbligatorio!" }]}
       >
         <Input className="login-item-input"
-           value={form.name}
-          onChange={(val) => setForm({ ...form, name: val })}
+          //  value={form.name}
+          // onChange={(val) => setForm({ ...form, name: val })}
           placeholder="Inserisci il tuo nome"
           
         />
@@ -448,7 +481,7 @@ const RegisterForm = () => {
           placeholder="Inserisci la tua email"
         />
       </Form.Item>
-      <Form.Item  className="login-item-box"
+      <Form.Item name="password" className="login-item-box"
       rules={[{ required: true, message: "La password è obbligatoria!" }]}
       >
         <Input className="login-item-input"

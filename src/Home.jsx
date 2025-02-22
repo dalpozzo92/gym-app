@@ -15,7 +15,7 @@ function Home() {
   export default Home;
 */
 import React, { useState, useEffect } from 'react';
-import { ResultPage, ProgressCircle } from 'antd-mobile';
+import { ResultPage, ProgressCircle, Form } from 'antd-mobile';
 import { SafeArea } from 'antd-mobile'     
 
 import { AlipayCircleFill } from 'antd-mobile-icons';
@@ -36,6 +36,7 @@ const Home = () => {
   const Card = ResultPage.Card;
 
   return (
+    
     <div className="page-container">
               <SafeArea position='top' />
 
@@ -75,10 +76,13 @@ const Home = () => {
       </ResultPage>
 </div>
       {/* Inseriamo il componente MyTapBar alla fine */}
-      <SafeArea position='bottom' />
-
+      <div style={{ background: '#ffcfac' }}>
+        <SafeArea position='bottom' />
+      </div>
       <MyTapBar />
-      <SafeArea position='bottom' />
+      <div style={{ background: '#ffcfac' }}>
+        <SafeArea position='bottom' />
+      </div>
 
     </div>
   );

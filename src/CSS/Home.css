@@ -5,6 +5,7 @@
     --adm-color-danger: #ef4444; 
     --adm-color-background: #171717; 
     --adm-color-text: #ffffff; 
+    --adm-color-box: black;
   }
 
   .page-container {
@@ -12,6 +13,10 @@
     flex-direction: column;
     height: 100vh; /* Occupa tutta l'altezza dello schermo */
     overflow: hidden;
+    background-color: #171717;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
   }
   
   .page-content {
