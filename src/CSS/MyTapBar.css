@@ -4,17 +4,17 @@
   left: 0;
   width: 100%;
   z-index: 100;
-  background-color: rgba(0, 0, 0, 0.618);
-  height: 60px; /* Mantiene l'altezza della pagina corretta */
+  background-color: rgba(0, 0, 0, 0.775);
+  height: 80px; /* Mantiene l'altezza della pagina corretta */
   backdrop-filter: blur(10px); /* Opzionale: sfocatura sullo sfondo */
 
 }
 
 /* RIMUOVI questa regola se causa problemi */
-.page-container {
+.myTabBar-container {
   display: flex;
   flex-direction: column;
-  height: 60px; 
+  height: 80px; 
   overflow: hidden; 
   flex: 0;
   overflow-y: auto;

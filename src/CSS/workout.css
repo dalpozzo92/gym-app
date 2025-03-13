@@ -1,4 +1,4 @@
-/* .home {
+/* .workout {
     --adm-color-primary: #2c949d; 
     --adm-color-success: #10b981; 
     --adm-color-warning: #f59e0b; 
@@ -18,33 +18,61 @@
     box-sizing: border-box;
   } */
 
-  .home-page-container {
+  .workout-page-container {
     display: flex;
     flex-direction: column;
     height: 100vh; /* Occupa tutta l'altezza dello schermo */
     overflow: hidden;
-    background-color: #171717;
+    background-color: #000000;
     width: 100vw;
     padding: 0px;
     margin: 0px;
-    justify-content: center; 
-
   }
   
-  .home-page-content {
+  .workout-page-content {
     flex: 1;
     overflow-y: auto; /* Permette lo scroll del contenuto */
     padding-bottom: 60px; /* Lascia spazio per il TabBar */
-  }
-
-  .adm-result-page-content {
     padding-left: 20px;
     padding-right: 20px;
+    padding-top: 20px; /* Lascia spazio per il TabBar */
+    margin-top: 50px;
+
   }
 
-  .spinner-container {
-    display: flex;
-    justify-content: center; /* Centra orizzontalmente */
-    align-items: center; /* Centra verticalmente */
-    height: 100vh; /* Occupa tutta l'altezza della viewport */
+  .adm-nav-bar{
+    --height: 60px;
+
   }
+
+  .workout-card {
+    background-color: #1E1E1E;
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .workout-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .workout-card-icon {
+    font-size: 28px;
+    margin-right: 12px;
+  }
+  
+  .workout-card-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .adm-space{
+    --gap-vertical: 15px;
+  }
+

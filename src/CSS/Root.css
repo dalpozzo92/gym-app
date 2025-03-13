@@ -1,8 +1,35 @@
-/* :root:root {
-    --adm-color-primary: #2c949d; 
-    --adm-color-success: #10b981; 
-    --adm-color-warning: #f59e0b;
-    --adm-color-danger: #ef4444; 
-    --adm-color-background: #00000000; 
-    --adm-color-text: #ffffff; 
-  } */
+/* Variabili globali */
+:root:root {
+  --adm-color-primary: #2c949d;
+  --adm-color-success: #10b981;
+  --adm-color-warning: #f59e0b;
+  --adm-color-danger: #ef4444;
+  --adm-color-background: #171717;
+  --adm-color-text: #ffffff;
+  --adm-color-box: rgb(0, 0, 0);
+}
+
+
+/* Stili globali */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden; /* Blocca lo scroll */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--adm-color-background);
+  color: var(--adm-color-text);
+}
+
+
+.toast-content {
+  white-space: normal; /* Permette il ritorno a capo */
+  word-wrap: break-word; /* Rende possibile la rottura delle parole */
+  word-break: break-word; /* Garantisce che le parole troppo lunghe vengano spezzate */
+  max-width: 90%; /* Limita la larghezza */
+  margin: 0 auto; /* Centra orizzontalmente il contenuto */
+  text-align: center; /* Centra il testo */
+}

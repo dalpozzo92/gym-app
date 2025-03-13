@@ -140,6 +140,11 @@
     
 } */
 
+input:-webkit-autofill {
+    background-color: rgba(28, 27, 27, 0.977) !important; /* Mantieni lo sfondo scuro */
+    color: rgb(22, 22, 22) !important; /* Mantieni il testo bianco */
+    -webkit-text-fill-color: rgb(29, 29, 29) !important; /* Impedisce che il testo sia nero */
+}
 
 .login-page {
    
@@ -206,15 +211,17 @@
 
 .login-item-input{
     border-radius: 20px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.859);
     height: 50px;
     width: 100%;
     max-width: 400px;
+    color:rgb(23, 23, 23);
+    --placeholder-color: rgb(23, 23, 23);
 }
 
 .adm-list-body {
     background-color: rgba(0, 0, 0, 0);
-    padding: 20px;
+    /* padding: 20px; */
 
 
 }
@@ -222,6 +229,7 @@
 .adm-input-element{
     padding: 25px;
     border-radius: 25px;
+    color:rgb(18, 18, 18)
 
 }
 
@@ -258,7 +266,7 @@
 }
 
 .adm-tabs-header {
-    background-color: rgba(0, 0, 0, 0.352); /* Sfondo semi-trasparente */
+    background-color: rgba(0, 0, 0, 0.678); /* Sfondo semi-trasparente */
     border-radius: 25px; /* Angoli arrotondati */
     padding: 10px; /* Padding interno */
     backdrop-filter: blur(10px); /* Opzionale: sfocatura sullo sfondo */

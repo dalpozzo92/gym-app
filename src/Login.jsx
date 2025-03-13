@@ -249,42 +249,24 @@ export default Login;
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Tabs, Toast, SpinLoading, Image } from 'antd-mobile';
 import './CSS/Login.css';  // Assicurati di avere il file CSS per gli stili aggiuntivi
-import { createClient } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import { color, motion } from "framer-motion";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+import { registerUser, loginUser, getUserData } from '/api'; // Importa la funzione dal file api.js
+import utils from '/utils';
 
 
-const supabaseUrl = 'https://btvkhnecdcetfiaoozdt.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0dmtobmVjZGNldGZpYW9vemR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgwMTY3MzksImV4cCI6MjA1MzU5MjczOX0.KZZbe7QQWU2zQzEgMqe912SA0MWMp04_zk-bwytGQqU';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-const Login = () => {
+const Login =  () => {
   const [showLogin, setShowLogin] = useState('login');  // Cambia 'true' o 'false' con 'login' o 'register'
   const [loading, setLoading] = useState(true); // Stato per il caricamento
   // const imgLogo = './images/logo-crew.png';
-
+ 
   const navigate = useNavigate();
   // const [backgroundImage, setBackgroundImage] = useState('');
     const [fadeOut, setFadeOut] = useState(false); // Stato per gestire la dissolvenza
-    const backgroundImage = './images/background-2.jpg'; 
+    const backgroundImage = '/background-2.jpg'; 
 
 
-  // useEffect(() => {
-
-  //   const img = new Image();
-  //   img.src = './images/background-2.jpg'; // Percorso dell'immagine
-
-  //   img.onload = () => {
-  //     setBackgroundImage(`url(${img.src})`);
-  //     setLoading(false); // Imposta loading a false non appena l'immagine è caricata
-  //     setFadeOut(true); // Inizia la dissolvenza
-  //   };
- 
-
-  //   return () => {
-  //     // Pulizia se necessario
-  //   };
-  // }, []);
 
   const handleImageLoad = () => {
     setLoading(false);
@@ -305,15 +287,7 @@ const Login = () => {
 
   return (
 
-    //  <Form className="login-page"
-    //  style={backgroundStyle}
-    //   >
-    //      {loading && (
-    //     <div className={`loading-overlay ${fadeOut ? 'hidden' : ''}`}>
-    //       <SpinLoading size="large" />
-    //     </div>
-    //   )}
-       
+
     <Form className="login-page">
     {loading && (
       <div className={`loading-overlay ${fadeOut ? 'hidden' : ''}`}>
@@ -345,7 +319,7 @@ const Login = () => {
     >
 
         <Image 
-          src='./images/logo-crew.png' // Percorso del logo
+          src='/logo-crew.png' // Percorso del logo
           fit='contain' 
           className="logo"
         />
@@ -378,16 +352,26 @@ const LoginForm = ({ navigate }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    const { email, password } = form;
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      Toast.show({ content: 'Login effettuato con successo!' });
-      // Esempio di navigazione successiva:
-      navigate('/home');
+      const data = await loginUser(form.email, form.password);
+      utils.showToast('Login effettuato!');
+      try {
+        const userData = await getUserData();
+        utils.debug('Dati utente al login:', userData);
+        if (userData && userData.name) {
+          // setUsername(userData.name);
+          localStorage.setItem('user_details', JSON.stringify(userData));
+
+        }
+       
+      } catch (error) {
+        console.error('Errore nel recupero utente:', error);
+      } finally {
+        navigate('/home'); // Naviga alla home
+      }
     } catch (error) {
-      Toast.show({ content: `Errore durante il login: ${error.message}` });
+      utils.showToast( 'Errore: ', error.message);
     } finally {
       setLoading(false);
     }
@@ -431,18 +415,22 @@ const LoginForm = ({ navigate }) => {
 };
 
 const RegisterForm = () => {
-  const [form, setForm] = useState({ email: '', password: ''});
+  const [form, setForm] = useState({ name: '', email: '', password: ''});
   const [loading, setLoading] = useState(false);
   
   const handleRegister = async () => {
-    const { email, password } = form;
+    const { name, email, password } = form;
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      utils.showToast('Dati mancanti!');
+      return; // Interrompe l'esecuzione se il nome è vuoto
+    }
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) throw error;
-      Toast.show({ content: 'Registrazione completata! Ora puoi accedere.' });
+      const data = await registerUser(name, email, password);
+
+      utils.showToast( 'Registrazione completata! Ora puoi accedere.');
     } catch (error) {
-      Toast.show({ content: `Errore durante la registrazione: ${error.message}` });
+      showToast(error.message);
     } finally {
       setLoading(false);
     }
@@ -463,8 +451,8 @@ const RegisterForm = () => {
       rules={[{ required: true, message: "Il nome è obbligatorio!" }]}
       >
         <Input className="login-item-input"
-          //  value={form.name}
-          // onChange={(val) => setForm({ ...form, name: val })}
+          value={form.name}
+          onChange={(val) => setForm({ ...form, name: val })}
           placeholder="Inserisci il tuo nome"
           
         />
