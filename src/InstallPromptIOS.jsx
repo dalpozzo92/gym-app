@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd-mobile";
 import { Share2 } from "lucide-react";  // Importa l'icona di condivisione
 
@@ -19,11 +19,12 @@ const InstallPromptIOS = () => {
       visible={showModal}
       onClose={() => setShowModal(false)}
       title="Aggiungi alla schermata Home"
-      footer={
-        <Button block color="primary" onClick={() => setShowModal(false)}>
-          OK, ho capito!
-        </Button>
-      }
+      footer={[
+        {
+          text: 'OK, ho capito!',
+          onClick: () => setShowModal(false),
+        },
+      ]}
     >
       <p>Per installare l'app:</p>
       <ol>
