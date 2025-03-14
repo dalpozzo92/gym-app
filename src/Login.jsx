@@ -376,7 +376,10 @@ const LoginForm = ({ navigate }) => {
       } catch (userError) {
         utils.showToast('Errore nel recupero dei dati utente: ' + userError.message);
         setLoading(false);
-        forcedLogout(); // Torna alla pagina di login se il recupero fallisce
+        
+        navigate('/home'); // Vai alla home se tutto è andato bene
+
+        // forcedLogout(); // Torna alla pagina di login se il recupero fallisce
         return;
       }
 
