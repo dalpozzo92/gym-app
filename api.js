@@ -295,14 +295,8 @@ export const apiRequest = async (url, method = 'GET', body = null) => {
         response = await fetch(url, options); // Riprova la richiesta originale
       } else {
         utils.debug('Refresh token scaduto. Logout...');
-        await logout();
-        utils.showToast('Sessione scaduta. Effettua nuovamente il login.');
-        const logoutFn = getGlobalLogout();
-        if (logoutFn) {
-          await logout();
-          utils.showToast('Sessione scaduta. Effettua nuovamente il login.');
-          logoutFn(); // Esegui il redirect al login
-        }
+        await forcedLogout(); // Chiamata unica alla funzione forcedLogout
+
         return; // Evita di continuare l'esecuzione
       }
     }
@@ -418,6 +412,18 @@ export const logout = async () => {
 };
 
 
+export const forcedLogout = async () => {
+  const logoutFn = getGlobalLogout();
+  if (logoutFn) {
+    // Esegui il logout
+    await logoutFn();
+    // Mostra un toast di notifica
+    utils.showToast('Sessione scaduta. Effettua nuovamente il login.');
+  } else {
+    console.error('Forced logout: funzione di logout globale non disponibile.');
+  }
+};
+
 
 export default {
   apiRequest,
@@ -427,4 +433,5 @@ export default {
   getUserData,
   getWorkoutList,
   logout,
+  forcedLogout,
 };

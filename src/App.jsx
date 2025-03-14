@@ -13,6 +13,7 @@ import Setting from './setting';
 import WorkoutList from './workoutList'; // La pagina che vuoi navigare
 
 import { AuthProvider } from '/authContext';
+import InstallPromptIOS from "./InstallPromptIOS"; // Importa il popup
 
 
 
@@ -21,7 +22,10 @@ export default function App() {
   const showTabBar = location.pathname !== '/';
 
   return (
+
     <ConfigProvider>
+          <InstallPromptIOS /> 
+
         <AuthProvider>
 
         <Routes>

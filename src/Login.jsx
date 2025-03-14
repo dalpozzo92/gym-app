@@ -252,8 +252,9 @@ import './CSS/Login.css';  // Assicurati di avere il file CSS per gli stili aggi
 import { useNavigate } from 'react-router-dom';
 import { color, motion } from "framer-motion";
 const API_BASE_URL = import.meta.env.VITE_API_URL;
-import { registerUser, loginUser, getUserData } from '/api'; // Importa la funzione dal file api.js
+import { registerUser, loginUser, getUserData, forcedLogout } from '/api'; // Importa la funzione dal file api.js
 import utils from '/utils';
+import { Eye, EyeOff } from 'lucide-react';
 
 
 const Login =  () => {
@@ -350,65 +351,100 @@ const Login =  () => {
 const LoginForm = ({ navigate }) => {
   const [form, setForm] = useState({ email: '', password: ''});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleLogin = async () => {
     setLoading(true);
-    try {
-      const data = await loginUser(form.email, form.password);
-      utils.showToast('Login effettuato!');
+        // Fase 1: Login
+      let loginData;
       try {
-        const userData = await getUserData();
-        utils.debug('Dati utente al login:', userData);
-        if (userData && userData.name) {
-          // setUsername(userData.name);
-          localStorage.setItem('user_details', JSON.stringify(userData));
-
-        }
-       
-      } catch (error) {
-        console.error('Errore nel recupero utente:', error);
-      } finally {
-        navigate('/home'); // Naviga alla home
+        loginData = await loginUser(form.email, form.password);
+        utils.showToast('Login effettuato!');
+      } catch (loginError) {
+        utils.showToast('Errore di login: ' + loginError.message);
+        forcedLogout();
+        setLoading(false);
+        return; // Termina la funzione se il login fallisce
       }
-    } catch (error) {
-      utils.showToast( 'Errore: ', error.message);
-    } finally {
+
+      // Fase 2: Recupero dati utente
+      let userData;
+      try {
+        userData = await getUserData();
+        utils.debug('Dati utente al login:', userData);
+      } catch (userError) {
+        utils.showToast('Errore nel recupero dei dati utente: ' + userError.message);
+        setLoading(false);
+        forcedLogout(); // Torna alla pagina di login se il recupero fallisce
+        return;
+      }
+
+      // Verifica che i dati utente siano validi
+      if (userData && userData.name) {
+        localStorage.setItem('user_details', JSON.stringify(userData));
+        navigate('/home'); // Vai alla home se tutto è andato bene
+      } else {
+        utils.showToast('Errore: dati utente non validi');
+        forcedLogout();
+      }
       setLoading(false);
-    }
+    
   };
 
   return (
-    <Form className="login-form"
+    <Form
+      className="login-form"
       layout="vertical"
       onFinish={handleLogin}
       footer={
-        <Button block shape='rounded' color="primary" size="large" onClick={handleLogin} loading={loading}>
+        <Button
+          block
+          shape="rounded"
+          color="primary"
+          size="large"
+          onClick={handleLogin}
+          loading={loading}
+        >
           Accedi
         </Button>
       }
     >
-      <Form.Item name="email" className="login-item-box"
-      rules={[
-        { required: true, message: "L'email è obbligatoria!" },
-        { type: "email", message: "Inserisci un'email valida!" }
-      ]}
+      <Form.Item
+        name="email"
+        className="login-item-box"
+        rules={[
+          { required: true, message: "L'email è obbligatoria!" },
+          { type: "email", message: "Inserisci un'email valida!" },
+        ]}
       >
-        <Input className="login-item-input"
+        <Input
+          className="login-item-input"
           value={form.email}
-
           onChange={(val) => setForm({ ...form, email: val })}
           placeholder="Inserisci la tua email"
         />
-      </Form.Item >
-      <Form.Item name="password" className="login-item-box"
-            rules={[{ required: true, message: "La password è obbligatoria!" }]}
->
-        <Input className="login-item-input"
-          type="password"
-          value={form.password}
-          onChange={(val) => setForm({ ...form, password: val })}
-          placeholder="Inserisci la tua password"
+      </Form.Item>
+      <Form.Item
+        name="password"
+        className="login-item-box"
+        rules={[{ required: true, message: "La password è obbligatoria!" }]}
+      >
+        <div className="password-container">
+          <Input
+            className="login-item-input"
+            type={showPassword ? "text" : "password"}
+            value={form.password}
+            onChange={(val) => setForm({ ...form, password: val })}
+            placeholder="Inserisci la tua password"
           />
+          <span
+            className="password-toggle-icon"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </span>
+        </div>
       </Form.Item>
     </Form>
   );
@@ -417,6 +453,8 @@ const LoginForm = ({ navigate }) => {
 const RegisterForm = () => {
   const [form, setForm] = useState({ name: '', email: '', password: ''});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   
   const handleRegister = async () => {
     const { name, email, password } = form;
@@ -469,15 +507,26 @@ const RegisterForm = () => {
           placeholder="Inserisci la tua email"
         />
       </Form.Item>
-      <Form.Item name="password" className="login-item-box"
-      rules={[{ required: true, message: "La password è obbligatoria!" }]}
+      <Form.Item
+        name="password"
+        className="login-item-box"
+        rules={[{ required: true, message: "La password è obbligatoria!" }]}
       >
-        <Input className="login-item-input"
-          type="password"
-          value={form.password}
-          onChange={(val) => setForm({ ...form, password: val })}
-          placeholder="Inserisci la tua password"
-        />
+        <div className="password-container">
+          <Input
+            className="login-item-input"
+            type={showPassword ? "text" : "password"}
+            value={form.password}
+            onChange={(val) => setForm({ ...form, password: val })}
+            placeholder="Inserisci la tua password"
+          />
+          <span
+            className="password-toggle-icon"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </span>
+        </div>
       </Form.Item>
     </Form>
   );

@@ -229,8 +229,8 @@ input:-webkit-autofill {
 .adm-input-element{
     padding: 25px;
     border-radius: 25px;
-    color:rgb(18, 18, 18)
-
+    color:rgb(18, 18, 18);
+    font-size: small;
 }
 
 .adm-list-item-content-main{
@@ -295,6 +295,22 @@ input:-webkit-autofill {
   align-items: center; /* Centra orizzontalmente */
   justify-content: center; 
 }
+
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color:rgb(31, 31, 31);
+  }
+
+  .password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
 /*
 .input-field {
     border-radius: 10px;
