@@ -288,17 +288,12 @@ export const apiRequest = async (url, method = 'GET', body = null) => {
     let response = await fetch(url, options);
 
     if (response.status === 401) {
-      console.warn('Access token scaduto. Provo a rinnovarlo...');
-      const refreshSuccess = await refreshAccessToken();
-      if (refreshSuccess) {
-        utils.debug('Token rinnovato. Riprovo la richiesta...');
-        response = await fetch(url, options); // Riprova la richiesta originale
-      } else {
+      
         utils.debug('Refresh token scaduto. Logout...');
         await forcedLogout(); // Chiamata unica alla funzione forcedLogout
 
         return; // Evita di continuare l'esecuzione
-      }
+      
     }
 
     if (!response.ok) {
