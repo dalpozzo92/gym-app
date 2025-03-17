@@ -1,5 +1,5 @@
 [[redirects]]
   from = "/api/*"
-  to = "https://mio-backend.koyeb.app/:splat"
+  to = "https://gym-backend-production-7b12.up.railway.app/:splat"
   status = 200
   force = true
