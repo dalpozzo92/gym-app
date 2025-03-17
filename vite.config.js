@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa';
 
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -38,4 +37,14 @@ export default defineConfig({
       }
     }),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://gym-backend-production-7b12.up.railway.app', // URL del tuo backend su Railway
+        changeOrigin: true, // Impostato su true per evitare problemi con i CORS
+        secure: false, // Se usi HTTP su backend, metti false
+        rewrite: (path) => path.replace(/^\/api/, '') // Rimuove /api dalla richiesta
+      },
+    },
+  },
 })

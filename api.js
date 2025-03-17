@@ -267,45 +267,43 @@ import { getGlobalLogout } from '/authContext';
 const API_BASE_URL = import.meta.env.VITE_API_URL; // Assicurati che questa variabile sia impostata
 
 // Funzione generica per chiamate API (i cookie sono inviati automaticamente)
-export const apiRequest = async (url, method = 'GET', body = null) => {
-
-
+export const apiRequest = async (url, method = 'GET', body = null, retried = false) => {
   try {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-
-    const options = {
-      method,
-      headers,
-      credentials: 'include', // Importante per inviare e ricevere i cookie
-    };
-
+    const headers = { 'Content-Type': 'application/json' };
+    const options = { method, headers, credentials: 'include' };
+    
     if (body) {
       options.body = JSON.stringify(body);
     }
 
     let response = await fetch(url, options);
 
-    if (response.status === 401) {
+    if (response.status === 401 && !retried) {
+      console.warn('Token scaduto, provo a rinnovarlo...');
       
-        utils.debug('Refresh token scaduto. Logout...');
-        await forcedLogout(); // Chiamata unica alla funzione forcedLogout
-
-        return; // Evita di continuare l'esecuzione
-      
+      const refreshSuccess = await refreshAccessToken();
+      if (refreshSuccess) {
+        console.log('Token rinnovato, riprovo la richiesta originale...');
+        return apiRequest(url, method, body, true); // Riprova la richiesta dopo il refresh
+      } else {
+        console.error('Refresh token fallito. Eseguo logout.');
+        await forcedLogout();
+        return;
+      }
     }
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Request error');
+      throw new Error(errorData.message || 'Errore nella richiesta API');
     }
+
     return response.json();
   } catch (error) {
-    console.error('API request error:', error);
+    console.error('Errore nella richiesta API:', error);
     throw error;
   }
 };
+
 
 // Login: esegue il login e il server imposta i cookie
 export const loginUser = async (email, password) => {
@@ -356,16 +354,20 @@ export const refreshAccessToken = async () => {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
+
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Error refreshing token');
+      console.warn('Il token non è stato rinnovato.');
+      return false; // Refresh fallito
     }
-    return response.json(); // Potresti ricevere un messaggio o aggiornamenti, i cookie vengono settati dal server
+
+    console.log('Token rinnovato con successo.');
+    return true; // Refresh riuscito
   } catch (error) {
-    console.error('Refresh token error:', error);
+    console.error('Errore nel refresh token:', error);
     return false;
   }
 };
+
 
 // Get user data: recupera i dati utente dal server (i cookie vengono inviati automaticamente)
 export const getUserData = async () => {
