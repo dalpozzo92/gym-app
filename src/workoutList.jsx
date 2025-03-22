@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Skeleton, Card, Space, NavBar, Toast } from 'antd-mobile';
 import { FireFill, CalendarOutline } from 'antd-mobile-icons';
 import { motion } from "framer-motion";
-import { getWorkoutList } from '/api'; // Importa la funzione che recupera gli allenamenti
+import { getWorkoutList } from '/gymBackend'; // Importa la funzione che recupera gli allenamenti
 import './CSS/workoutList.css';
 import { useNavigate } from 'react-router-dom';
 import {Hash, CalendarDays, Clock } from 'lucide-react';

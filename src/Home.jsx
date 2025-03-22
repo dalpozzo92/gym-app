@@ -18,7 +18,7 @@ import React, { useState, useEffect } from 'react';
 import { ResultPage, ProgressCircle, Form, SpinLoading } from 'antd-mobile';
 import { SafeArea } from 'antd-mobile'   
 import { color, motion } from "framer-motion";
-import { getUserData } from '/api';
+import { getUserData, forcedLogout } from '/gymBackend';
 import utils from '/utils';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ const Home = () => {
     if (!userDetailsString) {
       console.error('Errore: user_details non trovato nel localStorage');
       utils.showToast("Errore nel caricamento. Effettuare il login");
-      navigate('/');
+      forcedLogout();
       throw new Error('User details non presenti');
     }
   

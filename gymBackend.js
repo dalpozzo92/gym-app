@@ -304,6 +304,43 @@ export const apiRequest = async (url, method = 'GET', body = null, retried = fal
   }
 };
 
+export const verifyToken = async (retried = false) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/verify-token`, {
+      method: 'GET',
+      credentials: 'include', // Necessario per inviare i cookie
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Verifica token effettuata con successo');
+
+      return data.isValid; // True se il token è valido
+    } 
+    
+    if (response.status === 401 && !retried) {
+      console.warn('Token scaduto, provo a rinnovarlo...');
+
+      const refreshSuccess = await refreshAccessToken();
+      if (refreshSuccess) {
+        console.log('Token rinnovato, riprovo la verifica...');
+        return verifyToken(true); // Riprova la verifica dopo il refresh
+      } else {
+        console.error('Refresh token fallito. Eseguo logout.');
+        await forcedLogout();
+        return false;
+      }
+    }
+
+    return false;
+  } catch (error) {
+    console.error('Errore nella verifica del token:', error);
+    return false;
+  }
+};
+
+
+
 
 // Login: esegue il login e il server imposta i cookie
 export const loginUser = async (email, password) => {
@@ -349,7 +386,7 @@ export const registerUser = async (name, email, password) => {
 // Refresh token: chiama l'endpoint di refresh per rinnovare i cookie
 export const refreshAccessToken = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/refresh`, {
+    const response = await fetch(`${API_BASE_URL}/refreshToken`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -414,8 +451,8 @@ export const forcedLogout = async () => {
   if (logoutFn) {
     // Esegui il logout
     await logoutFn();
-    // Mostra un toast di notifica
-    utils.showToast('Sessione scaduta. Effettua nuovamente il login.');
+    
+    console.warn('Sessione scaduta. Effettua nuovamente il login.');
   } else {
     console.error('Forced logout: funzione di logout globale non disponibile.');
   }
@@ -431,4 +468,5 @@ export default {
   getWorkoutList,
   logout,
   forcedLogout,
+  verifyToken,
 };

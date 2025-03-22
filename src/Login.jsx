@@ -252,22 +252,34 @@ import './CSS/Login.css';  // Assicurati di avere il file CSS per gli stili aggi
 import { useNavigate } from 'react-router-dom';
 import { color, motion } from "framer-motion";
 const API_BASE_URL = import.meta.env.VITE_API_URL;
-import { registerUser, loginUser, getUserData, forcedLogout } from '/api'; // Importa la funzione dal file api.js
+import { registerUser, loginUser, getUserData, forcedLogout } from '/gymBackend'; // Importa la funzione dal file api.js
 import utils from '/utils';
 import { Eye, EyeOff } from 'lucide-react';
+import { AuthProvider, useAuth } from '/authContext';
 
 
 const Login =  () => {
   const [showLogin, setShowLogin] = useState('login');  // Cambia 'true' o 'false' con 'login' o 'register'
   const [loading, setLoading] = useState(true); // Stato per il caricamento
   // const imgLogo = './images/logo-crew.png';
- 
+
   const navigate = useNavigate();
   // const [backgroundImage, setBackgroundImage] = useState('');
     const [fadeOut, setFadeOut] = useState(false); // Stato per gestire la dissolvenza
     const backgroundImage = '/background-2.jpg'; 
 
+    const { isAuthenticated } = useAuth();
 
+  useEffect(() => {
+    // Se l'utente è già autenticato, reindirizza alla home
+    if (isAuthenticated) {
+      navigate('/home'); // Se è già autenticato, reindirizza alla home
+      setLoading(false);
+      setFadeOut(true); // Inizia la dissolvenza
+    } else {
+      setLoading(false); // Se non è autenticato, continua il caricamento
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleImageLoad = () => {
     setLoading(false);
@@ -289,7 +301,7 @@ const Login =  () => {
   return (
 
 
-    <Form className="login-page">
+    <div className="login-page">
     {loading && (
       <div className={`loading-overlay ${fadeOut ? 'hidden' : ''}`}>
         <SpinLoading size="large" />
@@ -343,7 +355,7 @@ const Login =  () => {
 
       {/* </Form> */}
       
-      </Form>
+      </div>
    
   );
 };
@@ -376,7 +388,7 @@ const LoginForm = ({ navigate }) => {
       } catch (userError) {
         utils.showToast('Errore nel recupero dei dati utente: ' + userError.message);
         setLoading(false);
-        
+
         navigate('/home'); // Vai alla home se tutto è andato bene
 
         // forcedLogout(); // Torna alla pagina di login se il recupero fallisce

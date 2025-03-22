@@ -4,7 +4,7 @@ import { color, motion } from "framer-motion";
 import { createClient } from '@supabase/supabase-js';
 import { FireFill, CalendarOutline, StopOutline } from 'antd-mobile-icons';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '/api'; // Importa la funzione logout
+import { logout } from '/gymBackend'; // Importa la funzione logout
 import MyNavBar from '/src/MyNavBar'; // Importa il componente
 import utils from '/utils';
 
@@ -43,9 +43,7 @@ const Setting = () => {
   }
 
   const handleLogout = async () => {
-   
-
-
+    
     const { success, message } = await logout(); // Chiama la funzione logout
 
     if (success) {
