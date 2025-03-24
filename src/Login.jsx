@@ -481,7 +481,7 @@ const RegisterForm = () => {
     try {
       const data = await registerUser(name, email, password);
 
-      utils.showToast( 'Registrazione completata! Ora puoi accedere.');
+      utils.showToast( "Registrazione completata! Ora gli amministratori dovranno autorizzare l'iscrizione");
     } catch (error) {
       showToast(error.message);
     } finally {
